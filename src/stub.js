@@ -12,6 +12,17 @@ for (const key of Object.keys(builtIns)) {
   const languageName = key.replace("grmr_", "").replace("_", "-");
   hljs.registerLanguage(languageName, builtIns[key]);
 }
-// console.log(hljs.listLanguages());
+class DataLanguagePlugin {
+  prefix;
+  constructor(options) {
+    this.prefix = options.dataPrefix;
+  }
+  "after:highlight"(result) {
+    result.value = result.value.replaceAll(/^«([\w-]+)»(.*)/gm, (match, p1, p2) => {
+      return `<span class='${p1}'>${p2}</span>`;
+    });
+  }
+}
+hljs.addPlugin(new DataLanguagePlugin({ dataPrefix: "hljs" }));
 
 export default hljs;

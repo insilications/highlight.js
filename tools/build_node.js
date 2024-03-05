@@ -30,7 +30,24 @@ async function buildCJSIndex(name, languages) {
     return `hljs.registerLanguage('${lang.name}', ${require});`;
   });
 
+//    const myPlugin = `
+//  class DataLanguagePlugin {
+//    prefix;
+//    constructor(options) {
+//      this.prefix = options.dataPrefix;
+//    }
+//    "after:highlight"(result) {
+//      result.value = result.value.replaceAll(/^«([\\w-]+)»(.*)/gm, (match, p1, p2) => {
+//        return \`<span class='\${p1}'>\${p2}</span>\`;
+//      });
+//    }
+//  }
+// hljs.addPlugin(new DataLanguagePlugin({ dataPrefix: "hljs" }));
+// `;
+
   const index = `${header}\n\n${registration.join("\n")}\n\n${footer}`;
+  // const index = `${header}\n\n${registration.join("\n")}\n${myPlugin}\n\n${footer}`;
+
   await fs.writeFile(`${process.env.BUILD_DIR}/lib/${name}.js`, index);
 }
 
